@@ -151,11 +151,13 @@ def main():
             - ✅ True 
             - 🟢 Mostly True 
             - 🟡 Half True 
-            - 🟠 Barely True")
+            - 🟠 Barely True
+            ")
         with metric_col2:
             st.metric(" 
             - 🔴 False 
-            - 🔥 Pants on Fire")
+            - 🔥 Pants on Fire
+            ")
     
     if analyze_button and user_input:
         with st.spinner("🔄 Analyzing statement..."):
@@ -260,5 +262,6 @@ print("✅ app.py created successfully!")
 print("\n" + "="*60)
 print("File location:", os.path.abspath('app.py'))
 print("="*60)
+
 
 
