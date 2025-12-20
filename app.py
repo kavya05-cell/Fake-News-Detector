@@ -53,13 +53,35 @@ def preprocess_text(text):
 
 # Prediction function
 def predict_news(statement, model, vectorizer, encoder):
+    """
+    Predict whether a news statement is fake or not
+    """
+
+    # Preprocess the statement
     cleaned = preprocess_text(statement)
+
+    # Transform using TF-IDF
     features = vectorizer.transform([cleaned])
+
+    # Make prediction
     prediction = model.predict(features)[0]
-    prediction_proba = model.predict_proba(features)[0]
+
+    # Decode label
     predicted_label = encoder.inverse_transform([prediction])[0]
-    class_probabilities = dict(zip(encoder.classes_, prediction_proba))
-    return predicted_label, class_probabilities, cleaned
+
+    # Handle probability safely
+    if hasattr(model, "predict_proba"):
+        prediction_proba = model.predict_proba(features)[0]
+        class_probabilities = dict(
+            zip(encoder.classes_, prediction_proba)
+        )
+    else:
+        # Fallback for models like LinearSVC
+        class_probabilities = {cls: 0.0 for cls in encoder.classes_}
+        class_probabilities[predicted_label] = 1.0
+
+    return predicted_label, class_probabilities
+
 
 # Main app
 def main():
@@ -98,16 +120,12 @@ def main():
     with st.sidebar:
         st.header("ℹ️ About")
         st.info("""
-        This AI-powered tool analyzes news statements and predicts their credibility level.
+        This AI-powered tool predicts whether a news statement is:
 
-        **Categories:**
-        - ✅ True
-        - 🟢 Mostly True
-        - 🟡 Half True
-        - 🟠 Barely True
-        - 🔴 False
-        - 🔥 Pants on Fire
+        - 🔴 Fake
+        - ✅ Real
         """)
+
 
         st.header("📊 Model Info")
         st.write(f"**Algorithm:** Logistic Regression")
@@ -147,7 +165,7 @@ def main():
         st.header("📈 Quick Stats")
         metric_col1, metric_col2 = st.columns(2)
         with metric_col1:
-            st.metric("Total Classes", 6)
+            st.metric("Total Classes", 2)
         with metric_col2:
             st.metric("Features", "5000")
 
@@ -165,12 +183,8 @@ def main():
 
                 with col2:
                     emoji_map = {
-                        'true': '✅',
-                        'mostly-true': '🟢',
-                        'half-true': '🟡',
-                        'barely-true': '🟠',
-                        'false': '🔴',
-                        'pants-fire': '🔥'
+                    'Fake': '🔴',
+                    'Real': '✅'
                     }
 
                     emoji = emoji_map.get(predicted_label, '❓')
@@ -244,3 +258,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
