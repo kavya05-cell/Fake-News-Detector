@@ -143,13 +143,6 @@ def main():
                 if st.button(f"Example {i+1}", key=f"ex_{i}"):
                     user_input = example
     
-    with col2:
-        st.header("📈 Quick Stats")
-        metric_col1, metric_col2 = st.columns(2)
-        with metric_col1:
-            st.metric("Total Classes", 2)
-        with metric_col2:
-            st.metric("Features", "5000")
     
     if analyze_button and user_input:
         with st.spinner("🔄 Analyzing statement..."):
@@ -225,8 +218,6 @@ def main():
                     })
                     st.dataframe(prob_df_sorted, use_container_width=True, hide_index=True)
                 
-                with st.expander("🔧 View Preprocessed Text"):
-                    st.text_area("Cleaned statement:", cleaned_text, height=100)
                 
             except Exception as e:
                 st.error(f"❌ Error during analysis: {str(e)}")
@@ -237,7 +228,7 @@ def main():
     st.markdown("---")
     st.markdown("""
         <div style='text-align: center; color: #666;'>
-            <p>Built with ❤️ using Streamlit | Machine Learning Model: Logistic Regression</p>
+            <p>Built with ❤️ using Streamlit</p>
             <p><small>⚠️ Always verify news from multiple reliable sources.</small></p>
         </div>
     """, unsafe_allow_html=True)
@@ -254,3 +245,4 @@ print("✅ app.py created successfully!")
 print("\n" + "="*60)
 print("File location:", os.path.abspath('app.py'))
 print("="*60)
+
