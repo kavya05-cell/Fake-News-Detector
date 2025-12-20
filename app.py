@@ -143,16 +143,16 @@ def main():
                 if st.button(f"Example {i+1}", key=f"ex_{i}"):
                     user_input = example
       with col2:
-        st.header("The Prediction is not totally correct.")
-        metric_col1, metric_col2 = st.columns(2)
-        with metric_col1:
-            st.metric("✅ True
-        🟢 Mostly True
-        🟡 Half True
-        🟠 Barely True")
-        with metric_col2:
-            st.metric("🔴 False
-        🔥 Pants on Fire") 
+          st.header("The Prediction is not totally correct.")
+          metric_col1, metric_col2 = st.columns(2)
+          with metric_col1:
+              st.metric("✅ True
+          🟢 Mostly True
+          🟡 Half True
+          🟠 Barely True")
+          with metric_col2:
+              st.metric("🔴 False
+          🔥 Pants on Fire") 
     
     if analyze_button and user_input:
         with st.spinner("🔄 Analyzing statement..."):
@@ -255,4 +255,5 @@ print("✅ app.py created successfully!")
 print("\n" + "="*60)
 print("File location:", os.path.abspath('app.py'))
 print("="*60)
+
 
