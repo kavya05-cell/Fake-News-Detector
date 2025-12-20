@@ -1,4 +1,4 @@
-import streamlit as st
+app_code='''import streamlit as st
 import pickle
 import re
 import nltk
@@ -147,9 +147,15 @@ def main():
         st.header("📈 Quick Stats")
         metric_col1, metric_col2 = st.columns(2)
         with metric_col1:
-            st.metric(" - ✅ True - 🟢 Mostly True - 🟡 Half True - 🟠 Barely True")
+            st.metric(" 
+            - ✅ True 
+            - 🟢 Mostly True 
+            - 🟡 Half True 
+            - 🟠 Barely True")
         with metric_col2:
-            st.metric(" - 🔴 False - 🔥 Pants on Fire")
+            st.metric(" 
+            - 🔴 False 
+            - 🔥 Pants on Fire")
     
     if analyze_button and user_input:
         with st.spinner("🔄 Analyzing statement..."):
@@ -254,4 +260,5 @@ print("✅ app.py created successfully!")
 print("\n" + "="*60)
 print("File location:", os.path.abspath('app.py'))
 print("="*60)
+
 
