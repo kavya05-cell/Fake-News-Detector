@@ -1,4 +1,4 @@
-app_code='''import streamlit as st
+import streamlit as st
 import pickle
 import re
 import nltk
@@ -73,14 +73,14 @@ def main():
         <style>
         .main-header {
             font-size: 3rem;
-            color: #1E88E5;
+            color: #ffffff;
             text-align: center;
             font-weight: bold;
             margin-bottom: 10px;
         }
         .sub-header {
-            font-size: 1.2rem;
-            color: #666;
+            font-size: 1.3rem;
+            color: #d0d0d0;
             text-align: center;
             margin-bottom: 30px;
         }
@@ -142,17 +142,18 @@ def main():
             for i, example in enumerate(examples):
                 if st.button(f"Example {i+1}", key=f"ex_{i}"):
                     user_input = example
-      with col2:
-          st.header("The Prediction is not totally correct.")
-          metric_col1, metric_col2 = st.columns(2)
-          with metric_col1:
-              st.metric("✅ True
-          🟢 Mostly True
-          🟡 Half True
-          🟠 Barely True")
-          with metric_col2:
-              st.metric("🔴 False
-          🔥 Pants on Fire") 
+    
+    with col2:
+        st.header("📈 Quick Stats")
+        metric_col1, metric_col2 = st.columns(2)
+        with metric_col1:
+            st.metric(" - ✅ True
+        - 🟢 Mostly True
+        - 🟡 Half True
+        - 🟠 Barely True")
+        with metric_col2:
+            st.metric(" - 🔴 False
+        - 🔥 Pants on Fire")
     
     if analyze_button and user_input:
         with st.spinner("🔄 Analyzing statement..."):
@@ -228,6 +229,8 @@ def main():
                     })
                     st.dataframe(prob_df_sorted, use_container_width=True, hide_index=True)
                 
+                with st.expander("🔧 View Preprocessed Text"):
+                    st.text_area("Cleaned statement:", cleaned_text, height=100)
                 
             except Exception as e:
                 st.error(f"❌ Error during analysis: {str(e)}")
@@ -238,7 +241,7 @@ def main():
     st.markdown("---")
     st.markdown("""
         <div style='text-align: center; color: #666;'>
-            <p>Built with ❤️ using Streamlit</p>
+            <p>Built with ❤️ using Streamlit | Machine Learning Model: Logistic Regression</p>
             <p><small>⚠️ Always verify news from multiple reliable sources.</small></p>
         </div>
     """, unsafe_allow_html=True)
@@ -255,5 +258,3 @@ print("✅ app.py created successfully!")
 print("\n" + "="*60)
 print("File location:", os.path.abspath('app.py'))
 print("="*60)
-
-
