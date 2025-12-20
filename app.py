@@ -92,21 +92,21 @@ def main():
     )
 
    st.markdown("""
-      <style>
-      .main-header {
-         background: linear-gradient(90deg, #42a5f5, #7e57c2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-       }
-
-
-       .sub-header {
-          font-size: 1.3rem;
-          color: #d0d0d0;         /* Light grey */
-          text-align: center;
-          margin-bottom: 30px;
+        <style>
+        .main-header {
+            font-size: 3rem;
+            color: #ffffff;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-       </style>
+        .sub-header {
+            font-size: 1.3rem;
+            color: #d0d0d0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        </style>
     """, unsafe_allow_html=True)
 
 
@@ -259,6 +259,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
