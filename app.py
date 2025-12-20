@@ -1,4 +1,4 @@
-import streamlit as st
+app_code='''import streamlit as st
 import pickle
 import re
 import nltk
@@ -39,49 +39,27 @@ def load_models():
 def preprocess_text(text):
     lemmatizer = WordNetLemmatizer()
     stop_words = set(stopwords.words('english'))
-
+    
     text = str(text).lower()
-    text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
-    text = re.sub(r'[^a-zA-Z\s]', '', text)
+    text = re.sub(r'http\\S+|www\\S+|https\\S+', '', text, flags=re.MULTILINE)
+    text = re.sub(r'[^a-zA-Z\\s]', '', text)
     text = ' '.join(text.split())
-
+    
     words = text.split()
     words = [word for word in words if word not in stop_words and len(word) > 2]
     words = [lemmatizer.lemmatize(word) for word in words]
-
+    
     return ' '.join(words)
 
 # Prediction function
 def predict_news(statement, model, vectorizer, encoder):
-    """
-    Predict whether a news statement is fake or not
-    """
-
-    # Preprocess the statement
     cleaned = preprocess_text(statement)
-
-    # Transform using TF-IDF
     features = vectorizer.transform([cleaned])
-
-    # Make prediction
     prediction = model.predict(features)[0]
-
-    # Decode label
+    prediction_proba = model.predict_proba(features)[0]
     predicted_label = encoder.inverse_transform([prediction])[0]
-
-    # Handle probability safely
-    if hasattr(model, "predict_proba"):
-        prediction_proba = model.predict_proba(features)[0]
-        class_probabilities = dict(
-            zip(encoder.classes_, prediction_proba)
-        )
-    else:
-        # Fallback for models like LinearSVC
-        class_probabilities = {cls: 0.0 for cls in encoder.classes_}
-        class_probabilities[predicted_label] = 1.0
-
-    return predicted_label, class_probabilities
-
+    class_probabilities = dict(zip(encoder.classes_, prediction_proba))
+    return predicted_label, class_probabilities, cleaned
 
 # Main app
 def main():
@@ -90,68 +68,71 @@ def main():
         page_icon="📰",
         layout="wide"
     )
-
-   st.markdown("""
+    
+    st.markdown("""
         <style>
         .main-header {
             font-size: 3rem;
-            color: #ffffff;
+            color: #1E88E5;
             text-align: center;
             font-weight: bold;
             margin-bottom: 10px;
         }
         .sub-header {
-            font-size: 1.3rem;
-            color: #d0d0d0;
+            font-size: 1.2rem;
+            color: #666;
             text-align: center;
             margin-bottom: 30px;
         }
         </style>
     """, unsafe_allow_html=True)
-
-
-    st.markdown('<div class="main-header">📰 Fake News Detector</div>', unsafe_allow_html=True)
-
-    st.markdown('<div class="sub-header">AI-powered credibility analysis</div>', unsafe_allow_html=True)
+    
+    st.markdown('<p class="main-header">📰 Fake News Detector</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-header">Analyze news credibility using Machine Learning</p>', unsafe_allow_html=True)
+    
     model, vectorizer, encoder = load_models()
-
+    
     if model is None:
         st.stop()
-
+    
     with st.sidebar:
         st.header("ℹ️ About")
         st.info("""
-        This AI-powered tool predicts whether a news statement is:
-
-        - 🔴 Fake
-        - ✅ Real
+        This AI-powered tool analyzes news statements and predicts their credibility level.
+        
+        **Categories:**
+        - ✅ True
+        - 🟢 Mostly True
+        - 🟡 Half True
+        - 🟠 Barely True
+        - 🔴 False
+        - 🔥 Pants on Fire
         """)
-
-
+        
         st.header("📊 Model Info")
         st.write(f"**Algorithm:** Logistic Regression")
         st.write(f"**Features:** TF-IDF")
-
+        
         st.header("🎯 Tips")
         st.write("""
         - Enter complete sentences
         - Provide context when possible
         - Longer statements work better
         """)
-
+    
     col1, col2 = st.columns([2, 1])
-
+    
     with col1:
         st.header("🔍 Enter News Statement")
-
+        
         user_input = st.text_area(
             "Paste or type the news statement you want to verify:",
             height=150,
             placeholder="Example: The president announced a new policy today..."
         )
-
+        
         analyze_button = st.button("🔎 Analyze Statement", type="primary", use_container_width=True)
-
+        
         with st.expander("📝 Try Example Statements"):
             examples = [
                 "The president signed a new bill into law today.",
@@ -161,7 +142,7 @@ def main():
             for i, example in enumerate(examples):
                 if st.button(f"Example {i+1}", key=f"ex_{i}"):
                     user_input = example
-
+    
     with col2:
         st.header("📈 Quick Stats")
         metric_col1, metric_col2 = st.columns(2)
@@ -169,29 +150,33 @@ def main():
             st.metric("Total Classes", 2)
         with metric_col2:
             st.metric("Features", "5000")
-
+    
     if analyze_button and user_input:
         with st.spinner("🔄 Analyzing statement..."):
             try:
                 predicted_label, probabilities, cleaned_text = predict_news(
                     user_input, model, vectorizer, encoder
                 )
-
+                
                 st.markdown("---")
                 st.header("📊 Analysis Results")
-
+                
                 col1, col2, col3 = st.columns([1, 2, 1])
-
+                
                 with col2:
                     emoji_map = {
-                    'Fake': '🔴',
-                    'Real': '✅'
+                        'true': '✅',
+                        'mostly-true': '🟢',
+                        'half-true': '🟡',
+                        'barely-true': '🟠',
+                        'false': '🔴',
+                        'pants-fire': '🔥'
                     }
-
+                    
                     emoji = emoji_map.get(predicted_label, '❓')
                     st.markdown(f"### Predicted Credibility:")
                     st.markdown(f"# {emoji} **{predicted_label.upper()}**")
-
+                
                 max_prob = max(probabilities.values())
                 if max_prob > 0.5:
                     confidence = "High"
@@ -202,16 +187,16 @@ def main():
                 else:
                     confidence = "Low"
                     color = "red"
-
+                
                 st.markdown(f"**Model Confidence:** :{color}[{confidence} ({max_prob*100:.1f}%)]")
-
+                
                 st.subheader("📊 Probability Distribution")
-
+                
                 prob_df = pd.DataFrame({
                     'Category': list(probabilities.keys()),
                     'Probability': list(probabilities.values())
                 }).sort_values('Probability', ascending=True)
-
+                
                 fig = px.bar(
                     prob_df,
                     x='Probability',
@@ -221,7 +206,7 @@ def main():
                     color='Probability',
                     color_continuous_scale='RdYlGn'
                 )
-
+                
                 fig.update_traces(textposition='outside')
                 fig.update_layout(
                     height=400,
@@ -230,25 +215,25 @@ def main():
                     yaxis_title="",
                     xaxis=dict(range=[0, 1])
                 )
-
+                
                 st.plotly_chart(fig, use_container_width=True)
-
+                
                 with st.expander("📋 View Detailed Probabilities"):
                     prob_df_sorted = pd.DataFrame({
                         'Category': list(probabilities.keys()),
                         'Probability': [f"{v*100:.2f}%" for v in probabilities.values()]
                     })
                     st.dataframe(prob_df_sorted, use_container_width=True, hide_index=True)
-
+                
                 with st.expander("🔧 View Preprocessed Text"):
                     st.text_area("Cleaned statement:", cleaned_text, height=100)
-
+                
             except Exception as e:
                 st.error(f"❌ Error during analysis: {str(e)}")
-
+    
     elif analyze_button and not user_input:
         st.warning("⚠️ Please enter a news statement to analyze.")
-
+    
     st.markdown("---")
     st.markdown("""
         <div style='text-align: center; color: #666;'>
@@ -259,8 +244,13 @@ def main():
 
 if __name__ == "__main__":
     main()
+'''
 
+# Write to file
+with open('app.py', 'w', encoding='utf-8') as f:
+    f.write(app_code)
 
-
-
-
+print("✅ app.py created successfully!")
+print("\n" + "="*60)
+print("File location:", os.path.abspath('app.py'))
+print("="*60)
