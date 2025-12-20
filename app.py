@@ -91,26 +91,35 @@ def main():
         layout="wide"
     )
 
-    st.markdown("""
-        <style>
-        .main-header {
-            font-size: 3rem;
-            color: #1E88E5;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .sub-header {
-            font-size: 1.2rem;
-            color: #666;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        </style>
-    """, unsafe_allow_html=True)
+   st.markdown("""
+      <style>
+      .main-header {
+    background: linear-gradient(90deg, #42a5f5, #7e57c2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-    st.markdown('<p class="main-header">📰 Fake News Detector</p>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-header">Analyze news credibility using Machine Learning</p>', unsafe_allow_html=True)
+
+     .sub-header {
+     font-size: 1.3rem;
+     color: #d0d0d0;         /* Light grey */
+     text-align: center;
+     margin-bottom: 30px;
+   }
+   </style>
+       """, unsafe_allow_html=True)
+
+
+   st.markdown(
+    '<div class="main-header">📰 Fake News Detector</div>',
+    unsafe_allow_html=True
+   )
+
+   st.markdown(
+    '<div class="sub-header">AI-powered credibility analysis</div>',
+    unsafe_allow_html=True
+   )
+
 
     model, vectorizer, encoder = load_models()
 
@@ -258,4 +267,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
