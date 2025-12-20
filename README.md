@@ -51,6 +51,8 @@ Fake news spreads rapidly online and can drastically affect public opinion and d
 ## 🚧 Challenges & Current Status
 
 - **Low accuracy (~23%) with baseline models**
+
+- **New update: accuracy improved to 60%**
 - Fixing TF-IDF consistency across train/valid/test feature spaces
 - Next steps: Model tuning, feature improvements
 - Plan to explore algorithms better suited for text (SVM, deep learning)
