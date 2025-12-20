@@ -73,14 +73,14 @@ def main():
         <style>
         .main-header {
             font-size: 3rem;
-            color: #1E88E5;
+            color: #ffffff;
             text-align: center;
             font-weight: bold;
             margin-bottom: 10px;
         }
         .sub-header {
-            font-size: 1.2rem;
-            color: #666;
+            font-size: 1.3rem;
+            color: #d0d0d0;
             text-align: center;
             margin-bottom: 30px;
         }
@@ -254,3 +254,4 @@ print("✅ app.py created successfully!")
 print("\n" + "="*60)
 print("File location:", os.path.abspath('app.py'))
 print("="*60)
+
