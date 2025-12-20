@@ -110,17 +110,9 @@ def main():
     """, unsafe_allow_html=True)
 
 
-   st.markdown(
-    '<div class="main-header">📰 Fake News Detector</div>',
-    unsafe_allow_html=True
-   )
+    st.markdown('<div class="main-header">📰 Fake News Detector</div>', unsafe_allow_html=True)
 
-   st.markdown(
-    '<div class="sub-header">AI-powered credibility analysis</div>',
-    unsafe_allow_html=True
-   )
-
-
+    st.markdown('<div class="sub-header">AI-powered credibility analysis</div>', unsafe_allow_html=True)
     model, vectorizer, encoder = load_models()
 
     if model is None:
@@ -267,6 +259,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
