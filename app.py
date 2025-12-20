@@ -73,14 +73,14 @@ def main():
         <style>
         .main-header {
             font-size: 3rem;
-            color: #ffffff;
+            color: #1E88E5;
             text-align: center;
             font-weight: bold;
             margin-bottom: 10px;
         }
         .sub-header {
-            font-size: 1.3rem;
-            color: #d0d0d0;
+            font-size: 1.2rem;
+            color: #666;
             text-align: center;
             margin-bottom: 30px;
         }
@@ -147,17 +147,9 @@ def main():
         st.header("📈 Quick Stats")
         metric_col1, metric_col2 = st.columns(2)
         with metric_col1:
-            st.metric("""
-            - ✅ True 
-            - 🟢 Mostly True 
-            - 🟡 Half True 
-            - 🟠 Barely True
-            """)
+            st.metric("Total Classes", 2)
         with metric_col2:
-            st.metric(""" 
-            - 🔴 False 
-            - 🔥 Pants on Fire
-            """)
+            st.metric("Features", "5000")
     
     if analyze_button and user_input:
         with st.spinner("🔄 Analyzing statement..."):
@@ -262,7 +254,3 @@ print("✅ app.py created successfully!")
 print("\n" + "="*60)
 print("File location:", os.path.abspath('app.py'))
 print("="*60)
-
-
-
-
